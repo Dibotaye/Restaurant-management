@@ -19,7 +19,16 @@ var validate = validator.New()
 
 func GetFoods() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		recordPerPage, err := strvconv.Atoi(c.Quary{"recordPwrPage"})
+		if err != nil || recordPerPage {
+			recordPerPage = 10
+		}
 
+		strcov.Atoi(c.Query{"page"})
+		if err != nil || page < 1 {
+			page = 1
+		}
 	}
 }
 
@@ -58,7 +67,7 @@ func CreateFood() gin.HandlerFunc {
 		defer cancel()
 		if err != nil {
 			msg := fmt.Sprintf("menu was not found")
-			c.JSON(http.StatusInternalServerError.gin.H{"error": msg})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
 		food.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
