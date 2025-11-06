@@ -84,6 +84,10 @@ func CreateMenu() gin.HandlerFunc {
 	}
 }
 
+func inTimeSpan(start, end, check time.Time) bool {
+	return start.After(time.Now()) && end.After(start)
+}
+
 func updateMenu() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -121,7 +125,7 @@ func updateMenu() gin.HandlerFunc {
 
 			upsert := true
 			opt := options.UpdateOptions{
-				upsert: &upsert,
+				Upsert: &upsert,
 			}
 
 			result, err := menuCollection.UpdateOne(
